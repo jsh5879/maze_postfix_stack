@@ -8,17 +8,45 @@ typedef char Token;
 using namespace std;
 
 int index = 0;
-
-char NextToken(char* e)
+struct token {
+	bool tag;//0이면 숫자, 1이면 operator
+	union {
+		int num;//12+13
+		char opcode[3];//+,-   unary -는 $-로 저장
+	};
+};
+struct token inputToken[30];
+char NextToken(Expression e)
 {
-	char token = e[index];
+	char ch = e[index];
+	if (isOperand(ch))
+	{
+		inputToken[index].tag = 0;
+		if (isOperand(e[index + 1])) {
+
+			inputToken[index].num = 12; //
+		}
+		else
+			inputToken[index].num = 1; //
+	}
+	else {
+		inputToken[index].tag = 1;
+		if (isOperand(e[index + 1])) {
+			//opcode 찾는다 +, *
+		}
+		else
+			//opcode 찾는다 <= 등에 대하여
+	}
+
+
 	index++;
+	//수정 필요
 	return token;
 }
 
 bool isOperand(char x)
 {
-	if (x == '+' || x == '-' || x == '*' || x == '/' ||
+	if (x == '+' || x == '-' || x == '*' || x == '/' || x == '<' ||x == '>'||
 		x == '(' || x == ')' || x == '%' || x == '#')
 		return false;
 	else
@@ -31,15 +59,14 @@ int isp(char a)
 		return 8;
 	else if (a == '#')
 		return 8;
-	else if (a == '=' || a == '#' || a == '!')//=은 unary -로 사용, #은 unary +로 사용
+	else if (a == '-' || a == '+' || a == '!')//unary -, unary +
 		return 1;
 	else if (a == '*' || a == '%' || a == '/')
 		return 2;
 	else if (a == '+' || a == '-')
 		return 3;
-	else if (a == '<' || a == '>')//<=, >= 은 사용하지 않음
+	else if (a == '<' || a == '>' || a == '<=' || a == '>=')
 		return 4;
-	/*
 	else if (a == '==' || a == '!=')
 		return 5;
 	else if (a == '&&')
@@ -47,7 +74,6 @@ int isp(char a)
 	else if (a == '||')
 		return 7;
 	else
-	*/
 		return 10;
 }
 
@@ -55,15 +81,14 @@ int icp(char a)
 {
 	if (a == '(')
 		return 0;
-	else if (a == '=' || a == '#' || a == '!')//=은 unary -로 사용, #은 unary +로 사용
+	else if (a == '-' || a == '+' || a == '!')//unary -, unary +
 		return 1;
 	else if (a == '*' || a == '%' || a == '/')
 		return 2;
 	else if (a == '+' || a == '-')
 		return 3;
-	else if (a == '<' || a == '>')//<=, >= 은 사용하지 않음
+	else if (a == '<' || a == '>'|| a == '<='||a == '>=')
 		return 4;
-	/*
 	else if (a == '==' || a == '!=')
 		return 5;
 	else if (a == '&&')
@@ -71,8 +96,7 @@ int icp(char a)
 	else if (a == '||')
 		return 7;
 	else
-	*/
-	return 10;
+		return 10;
 }
 
 Expression Postfix(Expression e)
@@ -81,7 +105,6 @@ Expression Postfix(Expression e)
 	stack.Push('#');
 	for (char x = NextToken(e); x != NULL; x = NextToken(e))
 	{
-		//cout << "x = " << x << endl;
 		if (isOperand(x))
 			cout << x;
 		else if (x == ')')
