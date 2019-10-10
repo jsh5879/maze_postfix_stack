@@ -1,33 +1,42 @@
-//3.6.2 postfix notation
-//3.18~19
+/* postfix.cpp -  postfix notation 
+학번:
+이름:
+github id:
+*/
+
 #include <iostream>
 #include <memory>
 #include "stack.h"
 typedef char* Expression;
 typedef char Token;
 using namespace std;
-
+//입력은 5 + 4 + 12 * 13 등으로 정수는 두자리만 가능, 연산자는 모두 가능
 int index = 0;
 struct token {
 	bool tag;//0이면 숫자, 1이면 operator
 	union {
 		int num;//12+13
-		char opcode[3];//+,-   unary -는 $-로 저장
+		char opcode[3];//+,-   //unary -, +는 처리하지 않는다
 	};
 };
 struct token inputToken[30];
-char NextToken(Expression e)
+int NextToken(Expression e) //expression을 분석하여 inputToken[]의 index를 return
 {
+	int num1, num2;//num1은 10단위 숫자, num2는 1단위 숫자
 	char ch = e[index];
 	if (isOperand(ch))
 	{
 		inputToken[index].tag = 0;
 		if (isOperand(e[index + 1])) {
-
+			//'c' - 'a' => 2라는 정수를 얻을 수 있음
 			inputToken[index].num = 12; //
+			num1 = ((char)e[index] - '0') * 10;
+			num2 = (char)e[index + 1] - '0';
+			inputToken[index].num = num1 + num2; 
+			num1 = 0; num2 = 0;
 		}
 		else
-			inputToken[index].num = 1; //
+			inputToken[index].num = (char)e[index] - '0';
 	}
 	else {
 		inputToken[index].tag = 1;
@@ -41,7 +50,7 @@ char NextToken(Expression e)
 
 	index++;
 	//수정 필요
-	return token;
+	return index;
 }
 
 bool isOperand(char x)
@@ -103,7 +112,7 @@ Expression Postfix(Expression e)
 {
 	Stack<char> stack;
 	stack.Push('#');
-	for (char x = NextToken(e); x != NULL; x = NextToken(e))
+	for (char x = NextToken(e); x != NULL; x = NextToken(e))//NextToken()이 정수를 return하므로 수정 필요
 	{
 		if (isOperand(x))
 			cout << x;
@@ -136,7 +145,7 @@ Expression Postfix(Expression e)
 void Eval(Expression e) {
 	Stack<Token> stack;
 	stack.Push('#');
-	for (Token x = NextToken(e); x != '#'; x = NextToken(e))
+	for (Token x = NextToken(e); x != '#'; x = NextToken(e))//NextToken()이 정수를 return하므로 수정 필요
 		if (isOperand(x)) stack.Push(x);
 		else {
 			//remove the correct number of operands for operator x from stack;
