@@ -52,21 +52,6 @@ void Maze::randomInitialize() {
 			mark[i][j] = 0;
 		}
 	}
-	for (int i = 0; i < ROWS + 1; i++)
-	{
-		for (int j = 0; j < COLS + 1; j++)
-		{
-			// Maze의 벽 부분 처리
-			if (/* 벽의 여부를 확인하는 조건식 필요*/)
-			{
-
-			}
-			else
-			{
-
-			}
-		}
-	}
 }
 
 
@@ -125,5 +110,22 @@ offsets Maze::getNextEnd()
 ostream& operator<<(ostream& stream, Maze& _maze)
 {
 	// Maze와 mark를 각각 출력하는 함수 구현
+	for (int i = 0; i < ROWS + 1; i++) {
+		for (int j = 0; j < COLS + 1; j++)
+		{
+			stream << "MAZE: " << endl;
+			stream << _maze.maze[i][j] << " ";
+		}
+		stream << endl;
+	}
+	for (int i = 0; i < ROWS; i++) {
+		for (int j = 0; j < COLS; j++)
+		{
+			stream << "MARK: " << endl;
+			stream << _maze.mark[i][j] << " ";
+		}
+		stream << endl;
+	}
+
 	return stream;
 }
