@@ -101,11 +101,31 @@ offsets Maze::getNextStart()
 {
 	// 출발점을 구하는 함수 구현
 	// 출발점은 미로의 가장 왼쪽에 있는 공간 중 0인 숫자만 될 수 있음.
+	offsets start;
+	int j = 1;
+	for (int i = 1; i < 31; i++) {
+		if (maze[i][j] == 0) {
+			start.a = i;
+			start.b = j;
+			mark[i][j] = 1;
+		}
+	}
+	return start;
 }
 offsets Maze::getNextEnd()
 {
 	// 도착점을 구하는 함수 구현
 	// 출발점은 미로의 가장 오른쪽에 있는 공간 중 0인 숫자만 될 수 있음.
+	offsets end;
+	int i = 1;
+	for (int j = 1; j < 31; j++) {
+		if (maze[i][j] == 0) {
+			end.a = i;
+			end.b = j;
+			mark[i][j] = 1;
+		}
+	}
+	return end;
 }
 ostream& operator<<(ostream& stream, Maze& _maze)
 {
