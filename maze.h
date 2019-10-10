@@ -2,9 +2,7 @@
 const int DefaultSize = 100;
 
 enum directions { N, NE, E, SE, S, SW, W, NW };
-struct items {
-	int x, y, dir;
-};
+
 const int ROWS = 30, COLS = 30;
 struct offsets {
 	int a, b;

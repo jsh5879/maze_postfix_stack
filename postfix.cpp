@@ -1,7 +1,7 @@
 /* postfix.cpp -  postfix notation 
-학번:
-이름:
-github id:
+학번: 201524561
+이름: 장석환
+github id: jsh5879
 */
 
 #include <iostream>
@@ -11,6 +11,9 @@ typedef char* Expression;
 typedef char Token;
 using namespace std;
 //입력은 5 + 4 + 12 * 13 등으로 정수는 두자리만 가능, 연산자는 모두 가능
+
+bool isOperand(char x);
+
 int index = 0;
 struct token {
 	bool tag;//0이면 숫자, 1이면 operator
@@ -26,31 +29,37 @@ int NextToken(Expression e) //expression을 분석하여 inputToken[]의 index를 retur
 	char ch = e[index];
 	if (isOperand(ch))
 	{
-		inputToken[index].tag = 0;
-		if (isOperand(e[index + 1])) {
+		inputToken[index].tag = 0; //숫자다
+		if (isOperand(e[index + 1])) { //두자리정수일경우
 			//'c' - 'a' => 2라는 정수를 얻을 수 있음
-			inputToken[index].num = 12; //
+			inputToken[index].num = 12;
 			num1 = ((char)e[index] - '0') * 10;
 			num2 = (char)e[index + 1] - '0';
 			inputToken[index].num = num1 + num2; 
 			num1 = 0; num2 = 0;
 		}
-		else
+		else //한자리정수
 			inputToken[index].num = (char)e[index] - '0';
 	}
 	else {
-		inputToken[index].tag = 1;
+		inputToken[index].tag = 1; //연산자다
 		if (isOperand(e[index + 1])) {
 			//opcode 찾는다 +, *
+			inputToken[index].opcode[0] = e[index];
+			inputToken[index].opcode[1] = NULL;
 		}
-		else
+		else {
 			//opcode 찾는다 <= 등에 대하여
+			inputToken[index].opcode[0] = e[index];
+			inputToken[index].opcode[1] = e[index + 1];
+			inputToken[index].opcode[2] = NULL;
+			index++;
+		}
 	}
-
-
+	int realIndex = index;
 	index++;
 	//수정 필요
-	return index;
+	return realIndex;
 }
 
 bool isOperand(char x)
@@ -66,6 +75,8 @@ int isp(char a)
 {
 	if (a == '(')
 		return 8;
+	//else if (a == ')')
+		//return 8;
 	else if (a == '#')
 		return 8;
 	else if (a == '-' || a == '+' || a == '!')//unary -, unary +
@@ -110,36 +121,54 @@ int icp(char a)
 
 Expression Postfix(Expression e)
 {
+	int postfixIndex = 0;
 	Stack<char> stack;
 	stack.Push('#');
-	for (char x = NextToken(e); x != NULL; x = NextToken(e))//NextToken()이 정수를 return하므로 수정 필요
+	Expression postfix;
+	char x;
+	//for (char x = NextToken(e); x != NULL; x = NextToken(e))//NextToken()이 정수를 return하므로 수정 필요
+	for( x = e[NextToken(e)]; x != NULL; x = e[NextToken(e)])
 	{
-		if (isOperand(x))
+		if (isOperand(x)) {
 			cout << x;
+			postfix[postfixIndex] = x;
+			postfixIndex++;
+		}
 		else if (x == ')')
 		{
 			while (stack.Top() != '(')
 			{
 				cout << stack.Top();
+				postfix[postfixIndex] = x;
+				postfixIndex++;
 				stack.Pop();
 			}
 			stack.Pop();
 		}
 		else
-		{
+		{/*
 			for (; isp(stack.Top()) >= icp(x); stack.Pop())
 				cout << stack.Top();
+			stack.Push(x);*/
+			while (isp(stack.Top()) <= icp(x)) {
+				cout << stack.Top();
+				postfix[postfixIndex] = x;
+				postfixIndex++;
+				stack.Pop();
+			}
 			stack.Push(x);
 		}
 	}
 
-	char x;
-	while ((x = stack.Top()) != '#')
+	while (stack.Top() != '#')
 	{
-		cout << x;
+		cout << stack.Top();
+		postfix[postfixIndex] = x;
+		postfixIndex++;
 		stack.Pop();
 	}
-	cout << endl;
+	stack.Pop();
+	cout << "postfix: " << postfix <<endl;
 }
 
 void Eval(Expression e) {

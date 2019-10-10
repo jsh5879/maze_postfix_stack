@@ -5,12 +5,18 @@
 #include <memory>
 
 using namespace std;
+
+struct items {
+	int x, y, dir;
+};
+const int DefaultSize = 10000;
+
 template <class T>
 class Stack : public Bag<T>
 {
 public:
 	Stack(int MaxStackSize = DefaultSize);
-	T& Pop() const;
+	T& Pop();
 	T& Top() const; //used for postfix notation
 	void Push(const T&);
 	//friend를 template에 사용시 사용법
@@ -21,27 +27,31 @@ public:
 private:
 	void StackEmpty() { cout << "Stack is empty" << endl; };
 	void StackFull() { cout << "Stack is full" << endl; };
+	int top;
+	T* stack;
+	int size;
 };
+
 //Visual Studio2019에서 bag.h, bag.cpp로 분리하지 않아야 함
-template <class T>
+/*template <class T>
 Stack<T>::Stack(int stackCapacity) :capacity(stackCapacity)
 {
 	if (capacity < 1) cout << "Stack capacity must be > 0";
 	stack = new T[capacity];
 	top = -1;
-}
+}*/
 
 template <class T>
-T& Stack<T>::Pop() const
+T& Stack<T>::Pop()
 {
 	if (IsEmpty()) StackEmpty();
-	return array[top--];
+	return stack[top--];
 }
 template <class T>
 T& Stack<T>::Top() const //used for postfix processing
 {
 	if (IsEmpty()) StackEmpty();
-	return array[top];
+	return stack[top];
 }
 template <class T>
 void Stack<T>::Push(const T& t)
@@ -51,9 +61,9 @@ void Stack<T>::Push(const T& t)
 }
 
 template <class T>
-Stack<T>::Stack(int MaxStackSize) : MaxSize(MaxStackSize)
+Stack<T>::Stack(int MaxStackSize) : size(MaxStackSize)
 {
-	stack = new T[MaxSize];
+	stack = new T[size];
 	top = -1;
 }
 

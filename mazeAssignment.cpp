@@ -25,9 +25,9 @@ void main() {
 	do {
 		m->randomInitialize();
 		cout << m << endl;//난수를 사용하여 생성된 maze[][]을 출력
+		count = 0; //입출구 카운터
 		do {
-			count = 0;
-			start = m->getNextStart();
+			start = m->getNextStart(); //입구하나씩 찾는것
 			end = m->getNextEnd();
 			result = m->findPath(start, end);
 		} while (!result && count++ < 2 * ROWS);

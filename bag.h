@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include <iostream>
 #include <memory>
 using namespace std;
@@ -12,10 +11,10 @@ public:
 	bool IsFull();
 	int Size() const;
 	bool IsEmpty() const;
-	virtual T& Pop() const;
+	virtual T& Pop();
 	virtual void Push(const T&);
-private:
-	T* array;
+protected:
+	T* ary;
 	int capacity;
 	int top;
 };
@@ -24,12 +23,12 @@ template <class T>
 Bag<T>::Bag(int bagCapacity) : capacity(bagCapacity)
 {
 	if (capacity < 1) throw "Capacity must be > 0";
-	array = new T[capacity];
+	ary = new T[capacity];
 	top = -1;
 }
 
 template <class T>
-Bag<T>::~Bag() { delete[] array; }
+Bag<T>::~Bag() { delete[] ary; }
 
 template <class T>
 void ChangeSizeID(T*& a, const int oldSize, const int newSize)
@@ -61,22 +60,22 @@ void Bag<T>::Push(const T& x)
 	if (top == capacity - 1)
 		// 현재 버젼은 ordering 상태에서 push한다. non-ordering되게 push가 가능하게 수정
 	{
-		ChangeSizeID(array, capacity, 2 * capacity);
+		ChangeSizeID(ary, capacity, 2 * capacity);
 		capacity *= 2;
 	}
-	array[++top] = x;
+	ary[++top] = x;
 }
 
 template <class T>
-T& Bag<T>::Pop() const
+T& Bag<T>::Pop()
 {
 	T retValue;
 	if (IsEmpty()) throw "Bag is empty, cannot delete";
 	int deletePos = top / 2;
-	retValue = array[deletePos];
+	retValue = ary[deletePos];
 	// 실습 사항: no ordering상태로 pop되게 수정
-	//copy(array + deletePos + 1, array + top + 1, array + deletePos);
-	memcpy(array + deletePos, array + deletePos, top + 1);
+	//copy(ary + deletePos + 1, ary + top + 1, ary + deletePos);
+	memcpy(ary + deletePos, ary + deletePos, top + 1);
 	top--;
 	return retValue;
 }
