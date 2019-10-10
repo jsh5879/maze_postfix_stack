@@ -10,7 +10,7 @@ struct offsets {
 class Maze {
 public:
 	void randomInitialize();//boundary는 1로 설정 나머지는 0으로 설정, maze[][], mark[][]를 초기화
-	int findPath(offsets& , offsets& );
+	int findPath(offsets& start, offsets& end);
 	offsets getNextStart();//미로의 좌측이 0인 것을 return
 	offsets getNextEnd();//미로의 우측이 0인 것을 return
 	friend ostream& operator<<(ostream& stream, Maze& maze);
@@ -39,13 +39,17 @@ void Maze::randomInitialize() {
 		for (int j = 0; j < COLS + 1; j++)
 		{
 			// Maze의 벽 부분 처리
-			if (/* 벽의 여부를 확인하는 조건식 필요/*/)
+			if ((!i) || (!j) || (i == 31) || (j == 31)) 
 			{
-
+				maze[i][j] = 1;
 			}
 			// 벽이 아닐 경우 랜덤하게 생성
 			else {
+				int random = 0;
+				random = rand() % 2;
+				maze[i][j] = random;
 			};
+			mark[i][j] = 0;
 		}
 	}
 	for (int i = 0; i < ROWS + 1; i++)
@@ -64,7 +68,9 @@ void Maze::randomInitialize() {
 		}
 	}
 }
-int Maze::findPath(offsets &start, offsets &end) {
+
+
+int Maze::findPath(offsets &start, offsets &end)
 //void path(int m, int p)
 // Output a path (if any) in the maze; rows is m, cols is p;
 {

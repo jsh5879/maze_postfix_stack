@@ -50,7 +50,7 @@ T& Stack<T>::Pop()
 template <class T>
 T& Stack<T>::Top() const //used for postfix processing
 {
-	if (IsEmpty()) StackEmpty();
+//	if (IsEmpty()) StackEmpty();
 	return stack[top];
 }
 template <class T>

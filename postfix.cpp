@@ -79,8 +79,6 @@ int isp(char a)
 		//return 8;
 	else if (a == '#')
 		return 8;
-	else if (a == '-' || a == '+' || a == '!')//unary -, unary +
-		return 1;
 	else if (a == '*' || a == '%' || a == '/')
 		return 2;
 	else if (a == '+' || a == '-')
@@ -101,8 +99,6 @@ int icp(char a)
 {
 	if (a == '(')
 		return 0;
-	else if (a == '-' || a == '+' || a == '!')//unary -, unary +
-		return 1;
 	else if (a == '*' || a == '%' || a == '/')
 		return 2;
 	else if (a == '+' || a == '-')
@@ -125,6 +121,7 @@ Expression Postfix(Expression e)
 	Stack<char> stack;
 	stack.Push('#');
 	Expression postfix;
+	postfix = new char[20];
 	char x;
 	//for (char x = NextToken(e); x != NULL; x = NextToken(e))//NextToken()이 정수를 return하므로 수정 필요
 	for( x = e[NextToken(e)]; x != NULL; x = e[NextToken(e)])
@@ -169,8 +166,9 @@ Expression Postfix(Expression e)
 	}
 	stack.Pop();
 	cout << "postfix: " << postfix <<endl;
+	return postfix;
 }
-
+/*
 void Eval(Expression e) {
 	Stack<Token> stack;
 	stack.Push('#');
@@ -180,15 +178,17 @@ void Eval(Expression e) {
 			//remove the correct number of operands for operator x from stack;
 			//perform the operation x and store the result onto the stack;
 		}
-}
+}*/
 
 void main()
 {
 	index = 0;
 	Expression infix, postfix;
+	infix = new char[20];
+	postfix = new char[20];
 	scanf("%s", infix);
 	cout << infix << endl;
 	postfix = Postfix(infix);
-	Eval(postfix);
+	//Eval(postfix);
 	cout << postfix << endl;
 }

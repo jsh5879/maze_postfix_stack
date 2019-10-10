@@ -1,7 +1,7 @@
 /* mazeAssignment,cpp - finding a path through a maze
-학번:
-이름:
-github id:
+학번: 201524561
+이름: 장석환
+github id: jsh5879
 */
 #include <iostream>
 #include <fstream>
@@ -12,6 +12,10 @@ using namespace std;
 ostream& operator<<(ostream& os, items& item)
 {
 	return os << item.x << "," << item.y << "," << item.dir;
+}
+ostream& operator<<(ostream& os, offsets& offset)
+{
+	return os << offset.a << "," << offset.b << endl;
 }
 
 /*
